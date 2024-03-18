@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var proximity: Proximity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -16,5 +17,12 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        proximity = Proximity(this)
+        proximity.setListener(object : Proximity.Listener {
+            override fun onProximityChange(distance: Float) {
+                // if sensor returns float 0 then its near else it is far away
+            }
+        })
     }
 }
