@@ -9,8 +9,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
+import android.content.Intent;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -19,12 +21,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static final int SENSOR_PERMISSION_REQUEST_CODE = 1;
 
 
+    private static final int REQUEST_CHANGE_WIFI_STATE = 1;
+
+    private WifiManager wifiManager;
+
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Request permissions for sensors
         requestSensorPermissions();
+
+        requestChangeWifiStatePermission();
+
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         // Initialize sensor manager and get sensor instances
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -44,9 +55,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    private void requestChangeWifiStatePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CHANGE_WIFI_STATE}, REQUEST_CHANGE_WIFI_STATE);
+        }
+    }
+
+    private void toggleWifi() {
+        if (wifiManager != null) {
+            boolean isWifiEnabled = wifiManager.isWifiEnabled();
+            wifiManager.setWifiEnabled(!isWifiEnabled);
+        }
+    }
+
     private void showUserConsentDialog() {
         // Show a dialog or alert to get user consent for using DeepLock
         // If the user consents, start using the sensors
+        Intent intent = new Intent(this, SensorService.class);
+        startService(intent);
     }
 
     @Override
@@ -71,7 +97,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onPause() {
         super.onPause();
-        // Unregister sensor listeners
-        sensorManager.unregisterListener(this);
     }
 }
