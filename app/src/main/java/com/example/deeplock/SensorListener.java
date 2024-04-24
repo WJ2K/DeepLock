@@ -6,7 +6,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.math.BigDecimal;
 
@@ -80,7 +82,7 @@ public class SensorListener implements SensorEventListener {
 
             inclination = (int) Math.round(Math.toDegrees(Math.acos(g[2])));
 
-            //Log.v("SSS", g[0]+"  "+g[1]+"  "+g[2]+"  inc "+inclination);
+            Log.v("SSS", g[0]+"  "+g[1]+"  "+g[2]+"  inc "+inclination);
             accReading.setText("XYZ: "+round(g[0])+",  "+round(g[1])+",  "+round(g[2])+"  inc: "+inclination);
         }
         if(event.sensor.getType()==Sensor.TYPE_PROXIMITY){
@@ -94,6 +96,7 @@ public class SensorListener implements SensorEventListener {
         if((rp!=-1) && (rl!=-1) && (inclination!=-1)){
             main.detect(rp, rl, g, inclination);
         }
+
 
     }
 

@@ -46,9 +46,9 @@
         </activity>
 
         <service
-            android:name=".SensorService"
+            android:name=".SensorListener"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:foregroundServiceType="dataSync"/>
 
     </application>
