@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:theme="@style/Theme.DeepLock"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
@@ -11,41 +11,59 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/anton"
         android:gravity="top|center_horizontal"
         android:paddingTop="30dp"
         android:paddingBottom="50dp"
         android:text="@string/app_name"
-        android:textSize="50sp" />
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FF0000"
+        android:textSize="60sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/proximityAvailable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:fontFamily="@font/anton"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/proximityReading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:fontFamily="@font/anton"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/lightAvailable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:fontFamily="@font/anton"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/lightReading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:fontFamily="@font/anton"
+        android:textSize="16sp" />
+
     <TextView
         android:id="@+id/accAvailable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:fontFamily="@font/anton"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/accReading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:fontFamily="@font/anton"
+        android:textSize="16sp" />
 </LinearLayout>

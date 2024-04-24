@@ -1,5 +1,7 @@
 package com.example.deeplock;
 
+
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
@@ -33,14 +35,10 @@ public class MainActivity extends AppCompatActivity {
         }
         if ((prox >= 1) && (light >= 2) && (g[1] >= -0.7)) {
             if (pocket == 1) {
-
                 pocket = 0;
             }
         }
     }
 
-    //public void fullLockdown(){
-
-    //}
 
 }
