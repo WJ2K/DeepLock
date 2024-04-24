@@ -15,6 +15,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.widget.Toast;
 
+import android.provider.Settings;
+import android.view.WindowManager;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SensorListener sensorListener;
     private int pocket = 0;
+
+    private int originalBrightnessLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeApp() {
         sensorListener = new SensorListener(this, this);
-        // Initialize other components or operations that require the granted permissions
+        originalBrightnessLevel = getOriginalBrightnessLevel();
     }
 
     private boolean shouldRequestPermissions() {
@@ -86,14 +91,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void detect(float prox, float light, float[] g, int inc) {
-        if (prox < 1 && light < 2 && g[1] < -0.6 && inc >= 76 && inc <= 99) {
-            pocket = 1;
+        if (prox < 1 && light < 2) {
+            Toast.makeText(this, "In Pocket", Toast.LENGTH_SHORT).show();
             fullLockdown();
         }
-        if (prox >= 1 && light >= 2 && g[1] >= -0.7) {
-            if (pocket == 1) {
-                pocket = 0;
-            }
+        if (prox >= 1 && light >= 2) {
+            semiLockdown(g, inc);
+
         }
     }
 
@@ -107,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED) {
             if (wifiManager.isWifiEnabled()) {
                 wifiManager.setWifiEnabled(false);
+                Toast.makeText(this, "Wi-Fi off", Toast.LENGTH_SHORT).show();
             }
         } else {
             Log.d(TAG, "Wi-Fi permission not granted");
@@ -120,10 +125,35 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
             if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
                 bluetoothAdapter.disable();
+                Toast.makeText(this, "bluetooth off", Toast.LENGTH_SHORT).show();
             }
         } else {
             Log.d(TAG, "Bluetooth permission not granted");
             Toast.makeText(this, "Bluetooth permission not granted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private int getOriginalBrightnessLevel() {
+        try {
+            return Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
+        } catch (Settings.SettingNotFoundException e) {
+            Log.v("MainActivity", "Error retrieving default brightness level: " + e.getMessage(), e);
+            return 255; // Default to maximum brightness if unable to retrieve default brightness level
+        }
+    }
+
+    private void setBrightness(int brightness) {
+        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+        layoutParams.screenBrightness = brightness / 255f;
+        getWindow().setAttributes(layoutParams);
+    }
+
+    private void semiLockdown(float[] g, int inc){
+        if(inc < 30 || g[1] < 0.5 || g[1] > 0.9 || g[0] < -0.1 || g[0] > 0.1){
+            Toast.makeText(this, "changing brightness", Toast.LENGTH_SHORT).show();
+            setBrightness(0);
+        }else{
+            setBrightness(originalBrightnessLevel);
         }
     }
 }
