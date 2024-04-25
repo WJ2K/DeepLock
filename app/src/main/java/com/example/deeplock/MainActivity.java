@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Wi-Fi permission not granted");
             Toast.makeText(this, "Wi-Fi permission not granted", Toast.LENGTH_SHORT).show();
         }
-    }
+
 
     private void turnOffBluetooth() {
         BluetoothManager bluetoothManager = (BluetoothManager) getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
