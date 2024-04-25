@@ -15,6 +15,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.widget.Toast;
 
+import android.widget.FrameLayout;
+import android.view.View;
+import android.graphics.Color;
 import android.provider.Settings;
 import android.view.WindowManager;
 
@@ -31,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private SensorListener sensorListener;
-    private int pocket = 0;
 
     private int originalBrightnessLevel;
+    private View overlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,11 +152,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void semiLockdown(float[] g, int inc){
-        if(inc < 30 || g[1] < 0.5 || g[1] > 0.9 || g[0] < -0.1 || g[0] > 0.1){
-            Toast.makeText(this, "changing brightness", Toast.LENGTH_SHORT).show();
+        if(inc < 10 || g[1] < 0.2 || g[1] > 0.9 || g[0] < -0.1 || g[0] > 0.1){
+            makeScreenLookOff();
+        } else if (inc < 30 || g[1] < 0.5 || g[1] > 0.8) {
             setBrightness(0);
-        }else{
+        } else{
             setBrightness(originalBrightnessLevel);
+            restoreScreen();
         }
+    }
+    private void makeScreenLookOff() {
+        if (overlay == null) {
+            overlay = new View(this);
+            overlay.setLayoutParams(new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT));
+            overlay.setBackgroundColor(Color.BLACK);
+            ((FrameLayout) findViewById(android.R.id.content)).addView(overlay);
+        }
+        overlay.setVisibility(View.VISIBLE);
+    }
+
+    private void restoreScreen() {
+        if (overlay != null) {
+            overlay.setVisibility(View.GONE);
+        }
+        setBrightness(originalBrightnessLevel);
     }
 }
