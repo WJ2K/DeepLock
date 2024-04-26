@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (allPermissionsGranted) {
-                Log.d(TAG, "All permissions granted");
+                Log.d(TAG, "All permission s granted");
                 initializeApp();
             } else {
                 Log.d(TAG, "Permissions not granted");
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Wi-Fi permission not granted");
             Toast.makeText(this, "Wi-Fi permission not granted", Toast.LENGTH_SHORT).show();
         }
-
+    }
 
     private void turnOffBluetooth() {
         BluetoothManager bluetoothManager = (BluetoothManager) getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
@@ -152,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void semiLockdown(float[] g, int inc){
-        if(inc < 10 || g[1] < 0.2 || g[1] > 0.9 || g[0] < -0.1 || g[0] > 0.1){
+        if(inc < 10 || g[1] < 0.2 || g[1] > 0.9 || g[0] < -0.2 || g[0] > 0.2){
             makeScreenLookOff();
-        } else if (inc < 30 || g[1] < 0.5 || g[1] > 0.8) {
+        } else if (inc < 30 || g[1] < 0.5 || g[1] > 0.8 || g[0] < -0.1 || g[0] > 0.1 ) {
             setBrightness(0);
         } else{
             setBrightness(originalBrightnessLevel);
